@@ -1,5 +1,5 @@
 import sqlite3
-connection = sqlite3.connect('not_telegram.db')
+connection = sqlite3.connect('not_tg.db')
 cursor = connection.cursor()
 
 cursor.execute('''
@@ -12,15 +12,17 @@ balance INTEGER NOT NULL
 )          
 ''')
 
-for i in range(1, 11):
-    cursor.execute(''' INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)''',
-                   (f'newuser{i}',  f'{i}eample@gmail.com', f'{i}*10', '1000'))
+# for i in range(1, 11):
+#     cursor.execute(''' INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)''',
+#                    (f'newuser{i}',  f'{i}eample@gmail.com', f'{i*10}', '1000'))
 
 for i in range(1, 11, 2):
     cursor.execute('''UPDATE Users SET balance = ? WHERE username = ? ''', (500, f'User{i}'))
+total2 = cursor.fetchall()
+print(total2)
 
 for i in range(1, 10, 3):
-    cursor.execute('''DELITE FROM Users WHERE username = ? ''', (f'User{i}',))
+    cursor.execute('''DELETE FROM Users WHERE username = ? ''', (f'User{i}',))
 # cursor.execute('''SELECT * FROM Users WHERE age != 60''')
 # total = cursor.fetchall()
 # for user in total:
@@ -28,22 +30,24 @@ for i in range(1, 10, 3):
 
 
 # Удалите из базы данных not_telegram.db запись с id = 6.
-cursor.execute('''DELITE FROM Users WHERE id = ? ''', (6,))
+cursor.execute('''DELETE FROM Users WHERE id = ? ''', (6,))
 
 # Подсчитать общее количество записей.
 cursor.execute('''SELECT COUNT(*) FROM Users''')
-total2 = cursor.fetchone()[0]
-print(total2)
+count_users = cursor.fetchone()[0]
+print(count_users)
 
 # Посчитать сумму всех балансов.
-cursor.execute('''SELECT SUN(balance) FROM Users''')
-total3 = cursor.fetchone()[0]
-print(total3)
+cursor.execute('''SELECT SUM(balance) FROM Users''')
+sum_balance = cursor.fetchone()[0]
+print(sum_balance)
 
 # Вывести в консоль средний баланс всех пользователей.
 cursor.execute('''SELECT AVG(balance) FROM Users''')
-total4 = cursor.fetchone()[0]
-print(total4)
+avg_balance = cursor.fetchone()[0]
+print(avg_balance)
+
+print(sum_balance / avg_balance)
 
 connection.commit()
 connection.close()
