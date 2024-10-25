@@ -2,9 +2,7 @@ import sqlite3
 connection = sqlite3.connect('not_tg.db')
 cursor = connection.cursor()
 
-cursor.execute('''DELETE FROM Users''')
-cursor.execute('''DELETE FROM Users''')
-cursor.execute('''DELETE FROM Users''')
+
 cursor.execute('''
 CREATE  TABLE IF NOT EXISTS Users(
 id INTEGER PRIMARY KEY,
@@ -14,20 +12,21 @@ age INTEGER,
 balance INTEGER NOT NULL
 )          
 ''')
-cursor.execute('''DELETE (*) FROM Users''')
-cursor.execute('''DELETE FROM Users''')
+
 cursor.execute('''DELETE FROM Users''')
 for i in range(1, 11):
      cursor.execute(''' INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)''',
                     (f'newuser{i}',  f'{i}eample@gmail.com', f'{i*10}', '1000'))
 
-for i in range(1, 11, 2):
-    cursor.execute('''UPDATE Users SET balance = ? WHERE username = ? ''', (500, f'User{i}'))
+for age in range(1, 11, 2):
+    cursor.execute('''UPDATE Users SET balance = ? WHERE age = ? ''', (500, age * 10))
 total2 = cursor.fetchall()
 
 
-for i in range(1, 10, 3):
-    cursor.execute('''DELETE FROM Users WHERE username = ? ''', (f'User{i}',))
+for i in range(1, 11, 3):
+    # cursor.execute('''UPDATE Users FROM Users ''')
+    cursor.execute('''DELETE FROM Users WHERE id = ? ''', (i,))
+     
 # cursor.execute('''SELECT * FROM Users WHERE age != 60''')
 # total = cursor.fetchall()
 # for user in total:
