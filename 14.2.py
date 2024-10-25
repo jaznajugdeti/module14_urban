@@ -2,6 +2,9 @@ import sqlite3
 connection = sqlite3.connect('not_tg.db')
 cursor = connection.cursor()
 
+cursor.execute('''DELETE FROM Users''')
+cursor.execute('''DELETE FROM Users''')
+cursor.execute('''DELETE FROM Users''')
 cursor.execute('''
 CREATE  TABLE IF NOT EXISTS Users(
 id INTEGER PRIMARY KEY,
@@ -11,15 +14,17 @@ age INTEGER,
 balance INTEGER NOT NULL
 )          
 ''')
-
-# for i in range(1, 11):
-#     cursor.execute(''' INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)''',
-#                    (f'newuser{i}',  f'{i}eample@gmail.com', f'{i*10}', '1000'))
+cursor.execute('''DELETE (*) FROM Users''')
+cursor.execute('''DELETE FROM Users''')
+cursor.execute('''DELETE FROM Users''')
+for i in range(1, 11):
+     cursor.execute(''' INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)''',
+                    (f'newuser{i}',  f'{i}eample@gmail.com', f'{i*10}', '1000'))
 
 for i in range(1, 11, 2):
     cursor.execute('''UPDATE Users SET balance = ? WHERE username = ? ''', (500, f'User{i}'))
 total2 = cursor.fetchall()
-print(total2)
+
 
 for i in range(1, 10, 3):
     cursor.execute('''DELETE FROM Users WHERE username = ? ''', (f'User{i}',))
@@ -34,20 +39,19 @@ cursor.execute('''DELETE FROM Users WHERE id = ? ''', (6,))
 
 # Подсчитать общее количество записей.
 cursor.execute('''SELECT COUNT(*) FROM Users''')
-count_users = cursor.fetchone()[0]
-print(count_users)
+total_users = cursor.fetchone()[0]
 
 # Посчитать сумму всех балансов.
 cursor.execute('''SELECT SUM(balance) FROM Users''')
-sum_balance = cursor.fetchone()[0]
-print(sum_balance)
+all_balance = cursor.fetchone()[0]
 
-# Вывести в консоль средний баланс всех пользователей.
-cursor.execute('''SELECT AVG(balance) FROM Users''')
-avg_balance = cursor.fetchone()[0]
-print(avg_balance)
+print(all_balance / total_users)
+# # Вывести в консоль средний баланс всех пользователей.
+# cursor.execute('''SELECT AVG(balance) FROM Users''')
+# avg_balance = cursor.fetchone()[0]
+# print(avg_balance)
 
-print(sum_balance / avg_balance)
+
 
 connection.commit()
 connection.close()
