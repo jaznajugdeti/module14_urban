@@ -29,7 +29,7 @@ Inline_KB = InlineKeyboardMarkup(
     InlineKeyboardButton(text= "Product2", callback_data="product_buying"),
     InlineKeyboardButton(text= "Product3", callback_data="product_buying"),
     InlineKeyboardButton(text= "Product4", callback_data="product_buying")]
-    ], resize_keyboard=True
+    ]
 )
 
 # Создайте и дополните клавиатуры:
@@ -47,7 +47,7 @@ class UserState(StatesGroup):
 
 @dp.message_handler(commands=['start'])
 async def start(message):
-    await message.answer(f'Добро пожаловать ', reply_makup = start_kb)
+    await message.answer(f'Добро пожаловать ', reply_markup = start_kb)
 
 @dp.message_handler(text='Информация')
 async def inform(message):
@@ -57,18 +57,18 @@ async def inform(message):
     # Message хэндлер, который реагирует на текст "Купить" и оборачивает функцию get_buying_list(message).
     # Функция get_buying_list должна вывоить надписи 'Название: Product<number> |
     # Описание: описание <number> | Цена: <number * 100>' 4 раза.
-    @dp.message_handler(text='Купить')
-    async def get_buying_list(message):
-        for i in range(1, 5):
-            await message.answer(f'Название:Продукт{i} | Описание: описание {i} | Цена: {i * 100}')
-            with open(f'{i}.jpg', 'rb') as img:
-                await message.answer_photo(img)
-        await message.answer("Выберите продукт для покупки:", reply_markup = Inline_KB)
+@dp.message_handler(text='Купить')
+async def get_buying_list(message):
+    for i in range(1, 5):
+        await message.answer(f'Название:Продукт{i} | Описание: описание {i} | Цена: {i * 100}')
+        with open(f'{i}.jpg', 'rb') as img:
+            await message.answer_photo(img)
+    await message.answer("Выберите продукт для покупки:", reply_markup = Inline_KB)
 
-    @dp.callback_query_handler(text="product_buying")
-    async def send_confirm_message(call):
-        await call.message.answer("Вы успешно приобрели продукт!")
-        await call.answer()
+@dp.callback_query_handler(text="product_buying")
+async def send_confirm_message(call):
+    await call.message.answer("Вы успешно приобрели продукт!")
+    await call.answer()
 
         # После каждой надписи выводите картинки к продуктам.
         # В конце выведите ранее созданное Inline меню с надписью "Выберите продукт для покупки:".
